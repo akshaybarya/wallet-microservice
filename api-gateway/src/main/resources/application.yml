@@ -1,0 +1,29 @@
+server:
+  port: 8765
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE/v1/api/user/**
+          predicates:
+            - Path=/v1/api/user/**
+
+        - id: WALLET-SERVICE
+          uri: lb://WALLET-SERVICE/v1/callback/update-transaction
+          predicates:
+            - Path=/v1/callback/update-transaction
+
+      discovery:
+        locator:
+          lower-case-service-id: true
+  eureka:
+    client:
+      serviceUrl:
+        defaultZone: http://localhost:8761/eureka
+    instance:
+      hostname: localhost
+      prefer-ip-address: true
